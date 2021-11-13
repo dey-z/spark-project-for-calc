@@ -1,0 +1,11 @@
+/project/target/
+/project/project/
+/target/
+/.idea/
+/checkpoint/
+derby.log
+/metastore_db/
+prototest.pb
+/src/main/resources/application.local.conf
+.DS_Store
+
