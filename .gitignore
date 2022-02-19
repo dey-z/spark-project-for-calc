@@ -8,4 +8,4 @@ derby.log
 prototest.pb
 /src/main/resources/application.local.conf
 .DS_Store
-
+.bsp/
