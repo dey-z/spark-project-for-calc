@@ -39,8 +39,6 @@ object DataMergeWithCondition extends Logging with CommonBase {
       UserBehaviourData("b", "1", "ts_1"),
       UserBehaviourData("c", "4", "ts_3")
     )
-    var viewDF = spark.createDataFrame(spark.sparkContext.parallelize(viewData))
-    viewDF.show
 
     // create dummy purchaseDF
     val purchaseData = Seq(
@@ -48,27 +46,37 @@ object DataMergeWithCondition extends Logging with CommonBase {
       UserBehaviourData("a", "2", "ts_10"),
       UserBehaviourData("c", "2", "ts_11")
     )
-    var purchaseDF = spark.createDataFrame(spark.sparkContext.parallelize(purchaseData))
-    purchaseDF.show
+    try {
+      var viewDF = spark.createDataFrame(spark.sparkContext.parallelize(viewData))
+      viewDF.show
 
-    // drop timestamp column, add respective flags, remove duplicate rows
-    viewDF = viewDF
-      .drop("timestamp")
-      .withColumn("viewed_flag", lit(1))
-      .distinct()
-    purchaseDF = purchaseDF
-      .drop("timestamp")
-      .withColumn("purchased_flag", lit(1))
-      .distinct()
+      var purchaseDF = spark.createDataFrame(spark.sparkContext.parallelize(purchaseData))
+      purchaseDF.show
 
-    // full outer join, replace null with 0
-    val mergedDF = viewDF
-      .join(purchaseDF, Seq("user_id", "item_id"), "outer")
-      .na
-      .fill(0)
-    mergedDF.show(false)
+      // drop timestamp column, add respective flags, remove duplicate rows
+      viewDF = viewDF
+        .drop("timestamp")
+        .withColumn("viewed_flag", lit(1))
+        .distinct()
+      purchaseDF = purchaseDF
+        .drop("timestamp")
+        .withColumn("purchased_flag", lit(1))
+        .distinct()
 
-    // sparkSession close
-    spark.close
+      // full outer join, replace null with 0
+      val mergedDF = viewDF
+        .join(purchaseDF, Seq("user_id", "item_id"), "outer")
+        .na
+        .fill(0)
+      mergedDF.show(false)
+    } catch {
+      case e: Throwable =>
+        // sparkSession close
+        spark.close
+        throw new Exception(e)
+    } finally {
+      // sparkSession close
+      spark.close
+    }
   }
 }
