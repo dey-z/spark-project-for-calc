@@ -1,5 +1,5 @@
 # spark-project-for-calc
->practice for dataframes, matrix, rdds etc in spark
+>practice for dataframes, matrix, rdds etc in spark  
 >has many unrequired dependencies to be used maybe in future/to be deleted if not used
 
 ## (1)project dependencies

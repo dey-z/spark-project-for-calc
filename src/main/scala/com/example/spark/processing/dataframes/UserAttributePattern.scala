@@ -27,7 +27,7 @@ object UserAttributePattern extends Logging with CommonBase {
     //    user_13 apple 2
 
     // get sparkSession
-    val spark = getSparkSession("userAttributeMapping")
+    val spark = getSparkSession("userAttributePattern")
 
     // create dummy userDataDF
     val userData = Seq(
