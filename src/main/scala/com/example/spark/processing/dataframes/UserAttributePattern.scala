@@ -51,7 +51,9 @@ object UserAttributePattern extends Logging with CommonBase {
       // patternize userData -> userAttributePattern
 
       // 1. add pattern_name column using specified attributes
-      if (attributes.length == 3) {
+      if (attributes.length > 3) {
+        throw new Exception("max attributes is 3")
+      } else if (attributes.length == 3) {
         userDataDF = userDataDF.withColumn(
           "pattern_name",
           concat(
