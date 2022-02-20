@@ -19,3 +19,6 @@ https://www.jetbrains.com/help/idea/work-with-scala-formatter.html#scalafmt_conf
 ## (4)copy application.local.conf.sample to application.local.conf(if needed)
 ###  application.local.conf should have necessary settings template
 - cp src/main/resources/application.local.conf.sample src/main/resources/application.local.conf
+
+## (5)Check output
+>make a "run" sbt task in Run/Debug Configurations  

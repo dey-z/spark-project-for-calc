@@ -7,12 +7,12 @@ import org.apache.spark.sql.SparkSession
 trait CommonBase extends Logging {
 
   /**
-    * SparkSessionを作成して返す
+    * SparkSession
     *
     * @return
     */
   def getSparkSession(appName: String): SparkSession = {
-    // Spark初期化
+    // Init Spark
     val builder = SparkSession
       .builder()
 
