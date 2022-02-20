@@ -22,3 +22,4 @@ https://www.jetbrains.com/help/idea/work-with-scala-formatter.html#scalafmt_conf
 
 ## (5)Check output
 >make a "run" sbt task in Run/Debug Configurations  
+![Screen Shot 2022-02-20 at 11 52 36 (2)](https://user-images.githubusercontent.com/48423778/154826527-7384f0e5-e1ea-4ded-837a-ddba34b4199f.png)
