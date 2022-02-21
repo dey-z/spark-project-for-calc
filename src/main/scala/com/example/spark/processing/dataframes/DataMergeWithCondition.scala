@@ -32,7 +32,7 @@ object DataMergeWithCondition extends Logging with CommonBase {
     // get sparkSession
     val spark = getSparkSession("mergeWithCondApp")
 
-    // create dummy viewDF
+    // create dummy view data
     val viewData = Seq(
       UserBehaviourData("a", "1", "ts_1"),
       UserBehaviourData("a", "2", "ts_2"),
@@ -40,16 +40,18 @@ object DataMergeWithCondition extends Logging with CommonBase {
       UserBehaviourData("c", "4", "ts_3")
     )
 
-    // create dummy purchaseDF
+    // create dummy purchase data
     val purchaseData = Seq(
       UserBehaviourData("a", "2", "ts_7"),
       UserBehaviourData("a", "2", "ts_10"),
       UserBehaviourData("c", "2", "ts_11")
     )
     try {
+      // create viewDF
       var viewDF = spark.createDataFrame(spark.sparkContext.parallelize(viewData))
       viewDF.show
 
+      // create purchaseDF
       var purchaseDF = spark.createDataFrame(spark.sparkContext.parallelize(purchaseData))
       purchaseDF.show
 

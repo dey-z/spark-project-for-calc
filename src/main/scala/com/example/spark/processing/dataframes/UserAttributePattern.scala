@@ -5,7 +5,7 @@ import org.apache.logging.log4j.scala.Logging
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.expressions._
 
-case class UserData(user_id: String, attribute_1: String, attribute_2: String)
+case class UserData(user_id: String, attribute_1: String, attribute_2: Int)
 object UserAttributePattern extends Logging with CommonBase {
   def main(args: Array[String]): Unit = {
     // specify attributes column(max = 3)
@@ -29,22 +29,23 @@ object UserAttributePattern extends Logging with CommonBase {
     // get sparkSession
     val spark = getSparkSession("userAttributePattern")
 
-    // create dummy userDataDF
+    // create dummy userData
     val userData = Seq(
-      UserData("user_1", "りんご", "1"),
-      UserData("user_2", "apple", "2"),
-      UserData("user_4", "mango", "2"),
-      UserData("user_5", "apple", "1"),
-      UserData("user_6", "mango", "1"),
-      UserData("user_7", "apple", "2"),
-      UserData("user_8", "mango", "2"),
-      UserData("user_9", "apple", "1"),
-      UserData("user_10", "apple", "2"),
-      UserData("user_11", "apple", "2"),
-      UserData("user_12", null, "2"),
-      UserData("user_13", "apple", "2")
+      UserData("user_1", "りんご", 1),
+      UserData("user_2", "apple", 2),
+      UserData("user_4", "mango", 2),
+      UserData("user_5", "apple", 1),
+      UserData("user_6", "mango", 1),
+      UserData("user_7", "apple", 2),
+      UserData("user_8", "mango", 2),
+      UserData("user_9", "apple", 1),
+      UserData("user_10", "apple", 2),
+      UserData("user_11", "apple", 2),
+      UserData("user_12", null, 2),
+      UserData("user_13", "apple", 2)
     )
     try {
+      // create userDataDF
       var userDataDF = spark.createDataFrame(spark.sparkContext.parallelize(userData))
       userDataDF.show
 
