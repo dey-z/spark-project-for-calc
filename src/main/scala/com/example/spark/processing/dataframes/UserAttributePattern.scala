@@ -47,7 +47,7 @@ object UserAttributePattern extends Logging with CommonBase {
     try {
       // create userDataDF
       var userDataDF = spark.createDataFrame(spark.sparkContext.parallelize(userData))
-      userDataDF.show
+      // userDataDF.show
 
       // patternize userData -> userAttributePattern
       //      +------------+----------+-------+-----------+-----------+
@@ -87,7 +87,7 @@ object UserAttributePattern extends Logging with CommonBase {
       } else {
         userDataDF = userDataDF.withColumn("pattern_name", col(s"${attributes(0)}"))
       }
-      userDataDF.show()
+      // userDataDF.show()
 
       // 2. add pattern_id using row_number after dropping duplicate customers/users
       val userDataAttributePatternDF = userDataDF
@@ -100,7 +100,7 @@ object UserAttributePattern extends Logging with CommonBase {
           userDataDF("pattern_name")
         )
         .join(userDataDF, Seq("pattern_name"), "outer")
-      userDataAttributePatternDF.show
+      userDataAttributePatternDF.show(false)
     } catch {
       case e: Throwable =>
         // sparkSession close

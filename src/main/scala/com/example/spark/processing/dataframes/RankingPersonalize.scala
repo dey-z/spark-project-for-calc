@@ -83,7 +83,7 @@ object RankingPersonalize extends Logging with CommonBase {
     try {
       // create transactionDataDF
       val transactionDataDF = spark.createDataFrame(spark.sparkContext.parallelize(transactionData))
-      transactionDataDF.show
+      // transactionDataDF.show
 
       // create userAttributePatternDF
       var userAttributePatternDF = spark.createDataFrame(spark.sparkContext.parallelize(userAttributePattern))
@@ -91,12 +91,12 @@ object RankingPersonalize extends Logging with CommonBase {
       userAttributePatternDF = userAttributePatternDF
         .select("*")
         .where(col("pattern_id").isNotNull)
-      userAttributePatternDF.show
+      // userAttributePatternDF.show
 
       // 1. inner join transaction data with user attribute pattern on user_id
       val inputDF = transactionDataDF
         .join(userAttributePatternDF, Seq("user_id"), "inner")
-      inputDF.show
+      // inputDF.show
 
       // 2. make a list of distinct pattern_ids
       val patternIds = inputDF

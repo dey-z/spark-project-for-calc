@@ -49,11 +49,11 @@ object DataMergeWithCondition extends Logging with CommonBase {
     try {
       // create viewDF
       var viewDF = spark.createDataFrame(spark.sparkContext.parallelize(viewData))
-      viewDF.show
+      // viewDF.show
 
       // create purchaseDF
       var purchaseDF = spark.createDataFrame(spark.sparkContext.parallelize(purchaseData))
-      purchaseDF.show
+      // purchaseDF.show
 
       // drop timestamp column, add respective flags, remove duplicate rows
       viewDF = viewDF
