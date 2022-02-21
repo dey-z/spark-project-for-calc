@@ -129,7 +129,7 @@ object RankingPersonalize extends Logging with CommonBase {
         StructField("item_id", StringType, nullable = true),
           StructField("pattern_id", IntegerType, nullable = true),
           StructField("score", IntegerType, nullable = true)))
-      var outputDF = spark createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
+      var outputDF = spark.createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
       personalizedDFs.seq.foreach(df => {
         outputDF = df.union(outputDF)
       })
