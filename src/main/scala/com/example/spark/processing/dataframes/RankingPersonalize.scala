@@ -126,9 +126,9 @@ object RankingPersonalize extends Logging with CommonBase {
       // union all dfs
       case class Output(item_id: String, pattern_id: Int, score: Int)
       val schema = StructType(Seq(
-        StructField("item_id", StringType, nullable = true),
-          StructField("pattern_id", IntegerType, nullable = true),
-          StructField("score", IntegerType, nullable = true)))
+        StructField("item_id", StringType, nullable = false),
+          StructField("pattern_id", IntegerType, nullable = false),
+          StructField("score", IntegerType, nullable = false)))
       var outputDF = spark.createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
       personalizedDFs.seq.foreach(df => {
         outputDF = df.union(outputDF)
