@@ -99,14 +99,15 @@ object RankingPersonalize extends Logging with CommonBase {
       // inputDF.show
 
       // 2. make a list of distinct pattern_ids
-      val patternIds = inputDF
+      val patternIds = userAttributePatternDF
         .select("pattern_id")
         .distinct()
         .as[Int].collect.toList
 
       // 3. parallel map against pattern_ids to get ParSeq[DataFrame]
       val personalizedDFs: ParSeq[DataFrame] = patternIds.par.map { id =>
-        rankingColumn match {
+        // when pattern_id inside inputDF then personalized ranking
+        var resultDF = rankingColumn match {
           case "" =>
             inputDF
               .filter(s"pattern_id = ${id}")
@@ -122,6 +123,26 @@ object RankingPersonalize extends Logging with CommonBase {
               .sort(desc("score"))
               .select("item_id", "pattern_id", "score")
         }
+        // when the pattern_id is not inside inputDF normal ranking
+        if (resultDF.isEmpty) {
+          resultDF = rankingColumn match {
+            case "" =>
+              inputDF
+                .groupBy("item_id")
+                .agg(count("item_id") as "score")
+                .sort(desc("score"))
+                .withColumn("pattern_id", lit(id))
+                .select("item_id", "pattern_id", "score")
+            case s: String =>
+              inputDF
+                .groupBy("item_id")
+                .agg(sum(inputDF(s)) as "score")
+                .sort(desc("score"))
+                .withColumn("pattern_id", lit(id))
+                .select("item_id", "pattern_id", "score")
+          }
+        }
+        resultDF
       }
       // union all dfs
       case class Output(item_id: String, pattern_id: Int, score: Int)
@@ -133,7 +154,7 @@ object RankingPersonalize extends Logging with CommonBase {
       personalizedDFs.seq.foreach(df => {
         outputDF = df.union(outputDF)
       })
-      outputDF.show(false)
+      outputDF.show(1000)
     } catch {
       case e: Throwable =>
         // sparkSession close
