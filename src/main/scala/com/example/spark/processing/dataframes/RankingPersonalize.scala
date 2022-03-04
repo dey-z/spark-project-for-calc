@@ -90,6 +90,7 @@ object RankingPersonalize extends Logging with CommonBase {
       // filter out null pattern_ids
       userAttributePatternDF = userAttributePatternDF
         .select("*")
+        .where(col("pattern_id").isNotNull)
       // userAttributePatternDF.show
 
       // 1. inner join transaction data with user attribute pattern on user_id
@@ -100,7 +101,6 @@ object RankingPersonalize extends Logging with CommonBase {
       // 2. make a list of distinct pattern_ids(0 identifies null or no-hit pattern from userAttributePatternDF)
       val patternIds = inputDF
         .select("pattern_id")
-        .where(col("pattern_id").isNotNull)
         .distinct()
         .as[Int].collect.toList :+ 0
 
