@@ -90,7 +90,6 @@ object RankingPersonalize extends Logging with CommonBase {
       // filter out null pattern_ids
       userAttributePatternDF = userAttributePatternDF
         .select("*")
-        .where(col("pattern_id").isNotNull)
       // userAttributePatternDF.show
 
       // 1. inner join transaction data with user attribute pattern on user_id
@@ -142,7 +141,10 @@ object RankingPersonalize extends Logging with CommonBase {
                 .select("item_id", "pattern_id", "score")
           }
         }
+        // where pattern_id is 0 transform to null
         resultDF
+          .withColumn("pattern_id", when(col("pattern_id") === 0, null)
+          .otherwise(col("pattern_id")))
       }
       // union all dfs
       case class Output(item_id: String, pattern_id: Int, score: Int)
