@@ -97,11 +97,12 @@ object RankingPersonalize extends Logging with CommonBase {
         .join(userAttributePatternDF, Seq("user_id"), "inner")
       // inputDF.show
 
-      // 2. make a list of distinct pattern_ids
-      val patternIds = userAttributePatternDF
+      // 2. make a list of distinct pattern_ids(0 identifies null or no-hit pattern from userAttributePatternDF)
+      val patternIds = inputDF
         .select("pattern_id")
+        .where(col("pattern_id").isNotNull)
         .distinct()
-        .as[Int].collect.toList
+        .as[Int].collect.toList :+ 0
 
       // 3. parallel map against pattern_ids to get ParSeq[DataFrame]
       val personalizedDFs: ParSeq[DataFrame] = patternIds.par.map { id =>
@@ -122,7 +123,7 @@ object RankingPersonalize extends Logging with CommonBase {
               .sort(desc("score"))
               .select("item_id", "pattern_id", "score")
         }
-        // when the pattern_id is not inside inputDF normal ranking
+        // when the pattern_id is 0 means null(not in inputDF) then default ranking
         if (resultDF.isEmpty) {
           resultDF = rankingColumn match {
             case "" =>
@@ -150,7 +151,7 @@ object RankingPersonalize extends Logging with CommonBase {
       case class Output(item_id: String, pattern_id: Int, score: Int)
       val schema = StructType(Seq(
         StructField("item_id", StringType, nullable = false),
-          StructField("pattern_id", IntegerType, nullable = false),
+          StructField("pattern_id", IntegerType, nullable = true),
           StructField("score", IntegerType, nullable = false)))
       var outputDF = spark.createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
       personalizedDFs.seq.foreach(df => {
