@@ -90,6 +90,7 @@ object UserAttributePattern extends Logging with CommonBase {
       // userDataDF.show()
 
       // 2. add pattern_id using row_number after dropping duplicate customers/users
+      val listCols = userDataDF.columns.toList ++ List("pattern_name", "pattern_id")
       val userDataAttributePatternDF = userDataDF
         .dropDuplicates("user_id")
         .select("pattern_name")
@@ -100,6 +101,7 @@ object UserAttributePattern extends Logging with CommonBase {
           userDataDF("pattern_name")
         )
         .join(userDataDF, Seq("pattern_name"), "outer")
+        .select(listCols.map(m=>col(m)):_*)
       userDataAttributePatternDF.show(false)
     } catch {
       case e: Throwable =>
