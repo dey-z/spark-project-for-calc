@@ -50,22 +50,22 @@ object UserAttributePattern extends Logging with CommonBase {
       // userDataDF.show
 
       // patternize userData -> userAttributePattern
-      //      +------------+----------+-------+-----------+-----------+
-      //      |pattern_name|pattern_id|user_id|attribute_1|attribute_2|
-      //      +------------+----------+-------+-----------+-----------+
-      //      |     apple_1|         1| user_5|      apple|          1|
-      //      |     apple_1|         1| user_9|      apple|          1|
-      //      |        null|      null|user_12|       null|          2|
-      //      |    りんご_1|         5| user_1|     りんご|          1|
-      //      |     mango_1|         3| user_6|      mango|          1|
-      //      |     mango_2|         4| user_4|      mango|          2|
-      //      |     mango_2|         4| user_8|      mango|          2|
-      //      |     apple_2|         2| user_2|      apple|          2|
-      //      |     apple_2|         2| user_7|      apple|          2|
-      //      |     apple_2|         2|user_10|      apple|          2|
-      //      |     apple_2|         2|user_11|      apple|          2|
-      //      |     apple_2|         2|user_13|      apple|          2|
-      //      +------------+----------+-------+-----------+-----------+
+      //      +-------+-----------+-----------+------------+------------+----------+
+      //      |user_id|attribute_1|attribute_2|pattern_name|pattern_name|pattern_id|
+      //      +-------+-----------+-----------+------------+------------+----------+
+      //      |user_5 |apple      |1          |apple_1     |apple_1     |1         |
+      //      |user_9 |apple      |1          |apple_1     |apple_1     |1         |
+      //      |user_12|null       |2          |null        |null        |null      |
+      //      |user_1 |りんご     |1          |りんご_1    |りんご_1    |5         |
+      //      |user_6 |mango      |1          |mango_1     |mango_1     |3         |
+      //      |user_4 |mango      |2          |mango_2     |mango_2     |4         |
+      //      |user_8 |mango      |2          |mango_2     |mango_2     |4         |
+      //      |user_2 |apple      |2          |apple_2     |apple_2     |2         |
+      //      |user_7 |apple      |2          |apple_2     |apple_2     |2         |
+      //      |user_10|apple      |2          |apple_2     |apple_2     |2         |
+      //      |user_11|apple      |2          |apple_2     |apple_2     |2         |
+      //      |user_13|apple      |2          |apple_2     |apple_2     |2         |
+      //        +-------+-----------+-----------+------------+------------+----------+
 
       // 1. add pattern_name column using specified attributes
       if (attributes.length > 3) {
