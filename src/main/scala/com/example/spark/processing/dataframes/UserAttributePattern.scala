@@ -35,6 +35,8 @@ object UserAttributePattern extends Logging with CommonBase {
       UserData("user_2", "apple", "2"),
       UserData("user_4", "mango", "2"),
       UserData("user_5", "apple", "1"),
+      UserData("user_5", "apple", "2"),
+      UserData("user_5", "apple", "3"),
       UserData("user_6", "mango", "1"),
       UserData("user_7", "apple", "2"),
       UserData("user_8", "mango", "2"),
@@ -89,11 +91,15 @@ object UserAttributePattern extends Logging with CommonBase {
       }
       // userDataDF.show()
 
-      // 2. add pattern_id using row_number after dropping duplicate customers/users
+      // remove Duplicates of customers/users
+      userDataDF = userDataDF
+        .dropDuplicates("user_id")
+      // userDataDF.show()
+
+      // 2. add pattern_id using row_number
       val listCols = userDataDF.columns.toList ++ List("pattern_id")
       logger.info(listCols)
       val userDataAttributePatternDF = userDataDF
-        .dropDuplicates("user_id")
         .select("pattern_name")
         .distinct()
         .where(col("pattern_name").isNotNull)
@@ -103,7 +109,7 @@ object UserAttributePattern extends Logging with CommonBase {
         )
         .join(userDataDF, Seq("pattern_name"), "outer")
         .select(listCols.map(m=>col(m)):_*)
-      userDataAttributePatternDF.show(false)
+      userDataAttributePatternDF.show(1000)
     } catch {
       case e: Throwable =>
         // sparkSession close
